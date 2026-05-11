@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shereboy Tech Ltd | Music & Creative Innovation</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a7db2c3b93.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* Global reset and basic typography */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #090b12;
+      color: #e6eaf0;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+
+    .text-muted {
+      color: #a6afc8;
+    }
+
+    /* Loader screen styles */
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      background: #07080f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .loader-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .loader span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: #42c5f5;
+      border-radius: 50%;
+      animation: pulse 1s infinite ease-in-out;
+    }
+
+    .loader span:nth-child(2) { animation-delay: 0.15s; }
+    .loader span:nth-child(3) { animation-delay: 0.3s; }
+    .loader span:nth-child(4) { animation-delay: 0.45s; }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* Header with sticky navigation */
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(8, 10, 18, 0.96);
+      backdrop-filter: blur(15px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 18px 0;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      color: #cbd3e4;
+      padding: 8px 10px;
+      border-radius: 8px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(66, 197, 245, 0.14);
+      color: #42c5f5;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      color: #f2f7ff;
+      font-size: 1.4rem;
+    }
+
+    main {
+      padding: 40px 0 80px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 40px 0;
+    }
+
+    .hero-content {
+      max-width: 620px;
+    }
+
+    .hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(2rem, 4vw, 4.2rem);
+      line-height: 1.03;
+      margin-bottom: 18px;
+      color: #f8fbff;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: #c8d0e3;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .button-primary,
+    .button-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      transition: transform 0.25s ease, background 0.25s ease;
+      font-weight: 600;
+      min-width: 160px;
+    }
+
+    .button-primary {
+      background: #42c5f5;
+      color: #0b1220;
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #e8eef7;
+    }
+
+    .button-primary:hover,
+    .button-secondary:hover {
+      transform: translateY(-2px);
+      background: #4ed6ff;
+    }
+
+    .hero-panel {
+      background: linear-gradient(180deg, rgba(66,197,245,0.16), rgba(2,9,23,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-panel h2 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      letter-spacing: 0.08em;
+      color: #a8c7ff;
+    }
+
+    .hero-panel p {
+      color: #cdd7ea;
+      margin-bottom: 0;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    .section-title {
+      max-width: 760px;
+      margin-bottom: 24px;
+    }
+
+    .section-title h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .section-title p {
+      color: #a8b8ce;
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .content-card,
+    .service-card,
+    .music-card,
+    .testimonial-card,
+    .platform-card {
+      background: rgba(14, 18, 30, 0.95);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .content-card:hover,
+    .service-card:hover,
+    .music-card:hover,
+    .testimonial-card:hover,
+    .platform-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(66,197,245,0.24);
+    }
+
+    .content-card p,
+    .service-card p,
+    .testimonial-card p {
+      color: #b3bfda;
+    }
+
+    .content-card strong,
+    .service-card h3,
+    .testimonial-card strong {
+      color: #f6fbff;
+    }
+
+    .content-flex {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .music-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .music-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .music-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+      color: #86b0dc;
+      font-size: 0.95rem;
+    }
+
+    .music-card .music-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .music-card .music-actions button,
+    .music-card .music-actions a {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: #e8ecf3;
+      transition: background 0.25s ease, transform 0.25s ease;
+      text-align: center;
+    }
+
+    .music-card .music-actions button:hover,
+    .music-card .music-actions a:hover {
+      background: rgba(66,197,245,0.16);
+      transform: translateY(-2px);
+    }
+
+    .platform-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .platform-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 22px;
+    }
+
+    .platform-card i {
+      font-size: 1.7rem;
+      color: #42c5f5;
+      min-width: 38px;
+      min-height: 38px;
+      display: grid;
+      place-items: center;
+      background: rgba(66,197,245,0.1);
+      border-radius: 14px;
+    }
+
+    .platform-card h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .platform-card a {
+      color: #98b7d8;
+      font-size: 0.95rem;
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .gallery-card {
+      border-radius: 22px;
+      padding: 32px 18px;
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #d3e0ff;
+      background: linear-gradient(180deg, rgba(66,197,245,0.16), rgba(1,5,15,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .gallery-card strong {
+      display: block;
+      margin-top: 16px;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .testimonial-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .testimonial-card {
+      padding: 26px;
+      min-height: 220px;
+    }
+
+    .testimonial-card p {
+      margin-bottom: 18px;
+    }
+
+    .testimonial-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #42c5f5;
+    }
+
+    .contact-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .contact-info .info-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .contact-info .info-item i {
+      font-size: 1.3rem;
+      color: #42c5f5;
+      min-width: 34px;
+      margin-top: 4px;
+    }
+
+    .contact-form {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+    }
+
+    .contact-form label {
+      display: block;
+      margin-bottom: 8px;
+      color: #b7c3d8;
+      font-size: 0.95rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: #eef2fb;
+      margin-bottom: 18px;
+    }
+
+    .contact-form textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .contact-form button {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: #42c5f5;
+      color: #09111a;
+      font-weight: 700;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+
+    .contact-form button:hover {
+      background: #63d6ff;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 34px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #9fb3d3;
+      transition: color 0.25s ease;
+    }
+
+    .footer-links a:hover {
+      color: #42c5f5;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 14px;
+    }
+
+    .social-links a {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      color: #cfd9ed;
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-2px);
+      background: rgba(66,197,245,0.16);
+    }
+
+    /* Mobile responsive styles */
+    @media (max-width: 980px) {
+      .hero,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .music-grid,
+      .platform-grid,
+      .services-grid,
+      .gallery-grid,
+      .testimonial-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 12px;
+        flex-direction: column;
+        align-items: flex-end;
+        width: min(240px, 100vw);
+        background: rgba(8, 10, 18, 0.98);
+        padding: 18px;
+        border-radius: 18px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+      }
+
+      .nav-links.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+      }
+
+      .navbar {
+        position: relative;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 {
+        font-size: 2.6rem;
+      }
+
+      .music-grid,
+      .platform-grid,
+      .services-grid,
+      .gallery-grid,
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-buttons,
+      .music-card .music-actions {
+        flex-direction: column;
+      }
+
+      .contact-info .info-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Loader screen before content appears -->
+  <div class="loader-overlay" id="loaderOverlay">
+    <div class="loader">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <strong>Loading</strong>
+    </div>
+  </div>
+
+  <header>
+    <div class="container navbar">
+      <a href="#hero" class="brand">Shereboy Tech Ltd</a>
+      <nav>
+        <div class="nav-links" id="navLinks">
+          <a href="#hero" class="active">Home</a>
+          <a href="#about-company">Company</a>
+          <a href="#about-artist">Artist</a>
+          <a href="#music">Music</a>
+          <a href="#streaming">Streaming</a>
+          <a href="#services">Services</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <p class="section-heading">Welcome to Shereboy Tech Ltd</p>
+        <h1>Technology, Music & Creative Innovation</h1>
+        <p>Shereboy Tech Ltd is the creative engine driving the next generation of African music, digital branding and multimedia innovation. Led by visionary artist Shereboy, the company blends street energy, studio excellence, and compelling storytelling to connect audiences to authentic artistic expression.</p>
+        <div class="hero-buttons">
+          <a href="#music" class="button-primary"><i class="fas fa-play"></i>Listen Now</a>
+          <a href="#contact" class="button-secondary"><i class="fas fa-download"></i>Download Music</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <h2>About Shereboy Tech Ltd</h2>
+        <p>Shereboy Tech Ltd is a registered creative company focused on technology, music production, media promotion, entertainment, digital branding and creative innovation. The team supports young artists and digital creators with powerful storytelling, robust technical guidance and professional brand strategy.</p>
+      </div>
+    </section>
+
+    <section id="about-company">
+      <div class="section-title">
+        <h2>About Shereboy Tech Ltd</h2>
+        <p>Shereboy Tech Ltd is more than a studio — it is a platform for emerging talent, technological growth and modern entertainment experiences.</p>
+      </div>
+      <div class="grid content-flex">
+        <div class="content-card">
+          <strong>Company Overview</strong>
+          <p>Founded with a dedication to excellence, Shereboy Tech Ltd is a registered company with a broad creative focus. The business spans technology, music production, media promotion, entertainment, digital branding and creative innovation. Every service is designed to elevate artists and companies through polished execution and genuine cultural resonance.</p>
+        </div>
+        <div class="content-card">
+          <strong>Vision & Mission</strong>
+          <p>Our vision is to shape the future of African music and digital culture by combining modern technology with authentic storytelling. The mission is to provide a supportive, inspiring environment for young artists and digital creators to grow, learn, and reach new audiences with confidence.</p>
+        </div>
+        <div class="content-card">
+          <strong>Goals & Support</strong>
+          <p>Shereboy Tech Ltd aims to build strong artist brands, deliver world-class productions, create memorable visual identities, and expand media reach through strategic campaigns. With focused mentorship, distribution support and creative development, the company champions the next generation of voices.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about-artist">
+      <div class="section-title">
+        <h2>About Shereboy</h2>
+        <p>A talented artist and creative leader with roots in street inspired Afrobeat and a passion for storytelling.</p>
+      </div>
+      <div class="grid content-flex">
+        <div class="content-card">
+          <strong>Afrobeat and Street Vibes</strong>
+          <p>Shereboy delivers Afrobeat with raw street energy and melodic hooks. His music is built around rhythmic pulse, infectious chorus lines, and the authentic character of life in a bustling city. Every track has a sense of place and pride in culture.</p>
+        </div>
+        <div class="content-card">
+          <strong>Inspirational Lyrics</strong>
+          <p>His lyrics are grounded in real-life storytelling, focusing on ambition, resilience, love and the journey ahead. Shereboy crafts emotional narratives that inspire listeners while celebrating the power of community and self-belief.</p>
+        </div>
+        <div class="content-card">
+          <strong>Creativity and Future Goals</strong>
+          <p>Driven by boundless creativity, Shereboy dreams of global recognition, strategic collaborations and artistic impact. He pursues a future where his sound empowers young creators, expands brand identity, and brings together technology, music and inspiring visual experiences.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="music">
+      <div class="section-title">
+        <h2>Featured Music</h2>
+        <p>Discover a curated selection of songs from Shereboy’s catalogue. Each release blends rhythm, narrative and modern production for a memorable listening experience.</p>
+      </div>
+      <div class="grid music-grid">
+        <article class="music-card">
+          <h3>Street Vibes</h3>
+          <div class="music-meta">2025 · Afrobeat Essentials</div>
+          <p>A fast-paced anthem that captures the energy of city nights, street culture and the drive to succeed.</p>
+          <div class="music-actions">
+            <button onclick="playPreview('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">Audio Preview</button>
+            <a href="#contact">Download</a>
+          </div>
+        </article>
+
+        <article class="music-card">
+          <h3>Lagos Nights</h3>
+          <div class="music-meta">2024 · Rhythmic Nights</div>
+          <p>A melodic tribute to Lagos after dark, with warm percussion and poetic lyrical imagery.</p>
+          <div class="music-actions">
+            <button onclick="playPreview('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">Audio Preview</button>
+            <a href="#contact">Download</a>
+          </div>
+        </article>
+
+        <article class="music-card">
+          <h3>No Pressure</h3>
+          <div class="music-meta">2023 · Motivation Track</div>
+          <p>A motivational track about staying calm under pressure, building confidence and keeping focus.</p>
+          <div class="music-actions">
+            <button onclick="playPreview('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">Audio Preview</button>
+            <a href="#contact">Download</a>
+          </div>
+        </article>
+
+        <article class="music-card">
+          <h3>Hustle Anthem</h3>
+          <div class="music-meta">2024 · Work Hard</div>
+          <p>High energy rhythms and sharp choruses designed to celebrate hustle, determination and growth.</p>
+          <div class="music-actions">
+            <button onclick="playPreview('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')">Audio Preview</button>
+            <a href="#contact">Download</a>
+          </div>
+        </article>
+
+        <article class="music-card">
+          <h3>Dream Chaser</h3>
+          <div class="music-meta">2025 · Aspirational R&B</div>
+          <p>An inspiring ballad for dreamers, celebrating ambition, sacrifice and the power of purpose.</p>
+          <div class="music-actions">
+            <button onclick="playPreview('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3')">Audio Preview</button>
+            <a href="#contact">Download</a>
+          </div>
+        </article>
+
+        <article class="music-card">
+          <h3>Life Journey</h3>
+          <div class="music-meta">2023 · Soulful Story</div>
+          <p>A reflective composition that shares life lessons, personal growth and the value of staying true.</p>
+          <div class="music-actions">
+            <button onclick="playPreview('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3')">Audio Preview</button>
+            <a href="#contact">Download</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="streaming">
+      <div class="section-title">
+        <h2>Streaming Platforms</h2>
+        <p>Listen to Shereboy on your favorite platform and connect with music wherever you are.</p>
+      </div>
+      <div class="grid platform-grid">
+        <div class="platform-card">
+          <i class="fab fa-spotify"></i>
+          <div>
+            <h3>Spotify</h3>
+            <a href="https://open.spotify.com/" target="_blank" rel="noopener">Open Spotify</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <i class="fab fa-youtube"></i>
+          <div>
+            <h3>YouTube Music</h3>
+            <a href="https://music.youtube.com/" target="_blank" rel="noopener">Open YouTube Music</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <i class="fas fa-compact-disc"></i>
+          <div>
+            <h3>Audiomack</h3>
+            <a href="https://audiomack.com/" target="_blank" rel="noopener">Open Audiomack</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <i class="fab fa-apple"></i>
+          <div>
+            <h3>Apple Music</h3>
+            <a href="https://music.apple.com/" target="_blank" rel="noopener">Open Apple Music</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <i class="fas fa-bolt"></i>
+          <div>
+            <h3>Boomplay</h3>
+            <a href="https://www.boomplay.com/" target="_blank" rel="noopener">Open Boomplay</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="section-title">
+        <h2>Our Services</h2>
+        <p>Shereboy Tech Ltd offers an end-to-end suite of entertainment services designed for artists, brands and creative teams.</p>
+      </div>
+      <div class="grid services-grid">
+        <div class="service-card">
+          <h3>Music Production</h3>
+          <p>Professional songwriting, beat creation and audio direction to turn ideas into finished tracks.</p>
+        </div>
+        <div class="service-card">
+          <h3>Audio Mixing & Mastering</h3>
+          <p>Precision mixing and mastering to ensure each song sounds clear, powerful and competitive on every platform.</p>
+        </div>
+        <div class="service-card">
+          <h3>Website Development</h3>
+          <p>Custom websites and landing pages to showcase artists, brands, portfolios and digital experiences.</p>
+        </div>
+        <div class="service-card">
+          <h3>Artist Promotion</h3>
+          <p>Strategic promotion plans, press materials and social media campaigns to expand your audience reach.</p>
+        </div>
+        <div class="service-card">
+          <h3>Branding</h3>
+          <p>Visual identity development, logo design and storytelling that reflect artist personality and cultural relevance.</p>
+        </div>
+        <div class="service-card">
+          <h3>Digital Marketing</h3>
+          <p>Data-driven digital campaigns and content strategies that support sustainable growth online.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="section-title">
+        <h2>Gallery</h2>
+        <p>Visual snapshots of studio sessions, performances and creative moments from the Shereboy journey.</p>
+      </div>
+      <div class="grid gallery-grid">
+        <div class="gallery-card"><strong>Studio Sessions</strong></div>
+        <div class="gallery-card"><strong>Live Performances</strong></div>
+        <div class="gallery-card"><strong>Artist Portraits</strong></div>
+        <div class="gallery-card"><strong>Behind-the-Scenes</strong></div>
+      </div>
+    </section>
+
+    <section id="testimonials">
+      <div class="section-title">
+        <h2>Testimonials</h2>
+        <p>Feedback from fans, clients and collaborators who appreciate Shereboy’s music, creativity and company service.</p>
+      </div>
+      <div class="grid testimonial-grid">
+        <div class="testimonial-card">
+          <strong>Fan review</strong>
+          <p>"Shereboy’s music gives me hope and motivation every time I listen. The feeling is powerful and real."</p>
+          <span class="text-muted">– Music Enthusiast</span>
+        </div>
+        <div class="testimonial-card">
+          <strong>Client feedback</strong>
+          <p>"The production quality is outstanding. Shereboy Tech Ltd turned our project into a polished release with strong impact."</p>
+          <span class="text-muted">– Creative Partner</span>
+        </div>
+        <div class="testimonial-card">
+          <strong>Industry praise</strong>
+          <p>"The company delivers professionalism and creativity in every detail. I trust their team for promotion and branding."</p>
+          <span class="text-muted">– Media Executive</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-title">
+        <h2>Contact</h2>
+        <p>Reach out for collaboration, bookings or to learn more about Shereboy Tech Ltd and artist services.</p>
+      </div>
+      <div class="grid contact-grid">
+        <div class="contact-info">
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <strong>Email</strong>
+              <p>info@shereboytech.com</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <strong>Phone</strong>
+              <p>+234 800 123 4567</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fab fa-whatsapp"></i>
+            <div>
+              <strong>WhatsApp</strong>
+              <p>+234 800 123 4567</p>
+            </div>
+          </div>
+          <div class="social-links">
+            <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <form class="contact-form" action="#" method="post">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Your email" required>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us about your project" required></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="#hero">Home</a>
+        <a href="#about-company">Company</a>
+        <a href="#music">Music</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="social-links">
+        <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a>
+      </div>
+      <p class="text-muted">© 2026 Shereboy Tech Ltd. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Wait for the page to finish loading and hide the loader
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('loaderOverlay');
+      loader.classList.add('hidden');
+    });
+
+    // Mobile navigation toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+
+    // Smooth scrolling for anchor links and active link highlighting
+    const links = document.querySelectorAll('.nav-links a');
+    const sections = Array.from(document.querySelectorAll('main section'));
+
+    links.forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        navLinks.classList.remove('open');
+        const targetId = this.getAttribute('href').slice(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    function updateActiveLink() {
+      const scrollPosition = window.scrollY + 120;
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const bottom = top + section.offsetHeight;
+        const link = document.querySelector(`.nav-links a[href='#${section.id}']`);
+        if (scrollPosition >= top && scrollPosition < bottom) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+    updateActiveLink();
+
+    // Play audio preview if source is available
+    let previewAudio = null;
+    function playPreview(source) {
+      if (previewAudio) {
+        previewAudio.pause();
+        previewAudio = null;
+      }
+      previewAudio = new Audio(source);
+      previewAudio.volume = 0.8;
+      previewAudio.play().catch(() => {
+        alert('Audio preview is not available in this browser.');
+      });
+    }
+  </script>
+</body>
+</html>

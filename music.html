@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHEREBOY TECH LTD</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+
+<body>
+    <div id="particles"></div>
+    <div id="scroll-progress"></div>
+    <div class="glow-bg"></div>
+    <header>
+        <div class="header-logo">
+            <img src="Shereboy Tech Ltd.jpg" alt="company-logo" class="logo zoom-img">
+            <div class="header-text hidden">
+                <h1>SHEREBOY</h1>
+                <p>TECH LTD </p>
+            </div>
+        </div>
+        <input type="checkbox" id="sidebar-toggle" />
+        <label for="sidebar-toggle" class="toggle-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <div class="overlay-nav">
+            <label for="sidebar-toggle"></label>
+        </div>
+        <nav class="sidebar" id="sidebar">
+            <h3>Navigation</h3>
+            <ul class="nav-links" id="nav">
+                <li><a href="home.html"> <i class="fa-solid fa-home"></i>Home</a></li>
+                <li> <a href="about.html"> <i class="fas fa-user"></i>About</a> </li>
+                <li> <a href="service.html"> <i class="fas fa-cogs"></i>Service</a></li>
+                <li><a href="music.html"> <i class="fa-solid fa-music"></i>Music</a></li>
+                <li> <a href="feedback.html"> <i class="fas fa-comments"></i>Feedback</a></li>
+                <li> <a href="blog.html"> <i class="fas fa-blog"></i>Blog</a></li>
+                <li> <a href="project.html"> <i class="fas fa-diagram-project"></i>Project</a></li>
+                <li> <a href="contact.html"> <i class="fas fa-phone"></i>Contact</a> </li>
+            </ul>
+        </nav>
+    </header>
+    <section class="music-section section">
+        <h2 style="font-size: 30px;">MUSIC</h2>
+        <p class="intro-music"><strong>SHEREBOY TECH LTD</strong> is a dynamic technology company dedicated to providing
+            innovative digital
+            solutions, web
+            development, software services, and creative media production. Click the link below to learn more.
+            &downarrow;</p>
+        <a href="music-learn-more.html" class="LRM">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+
+        <a class="floating"
+            href="https://wa.me/2348124529757?text=Hello%20SHEREBOY%20TECH%20LTD%2C%20I%20am%20interested%20in%20your%20services.">
+            <i class="fa-brands fa-whatsapp fa-float"></i> </a>
+    </section>
+
+    <!--below is the music content-->
+    <div class="music-grid card">
+        <div class="music-container">
+            <div class="music-header">
+                <i class="fa-solid fa-music"></i>
+                <h2>MUSIC <span style="color: rgb(16, 174, 248);"> LIST </span> </h2>
+                <p style="color: #a0aec0;"> From the heart to the street </p>
+            </div>
+            <!--below is the first song NECESSARY BY SHEREBOY-->
+            <!--No 1-->
+            <div class="music-libary music-card">
+                <img src="Necessary by Shereboy art2.jpg" alt="music-cover" />
+                <div class="content">
+                    <div class="top-row">
+                        <div class="title">NECESSARY</div>
+                        <div class="duration">2:24</div>
+                    </div>
+                    <div class="name">SHEREBOY</div>
+                    <div class="meta">Afrobeat.2025</div>
+                    <audio controls>
+                        <source src="SHEREBOI NECCESSARY MST3.wav" type="audio/wav" />
+                    </audio>
+                </div>
+            </div>
+            <!--No 2-->
+            <div class="music-libary music-card">
+                <img src="Febuary 14.jpg" alt="music-cover" />
+                <div class="content">
+                    <div class="top-row">
+                        <div class="title">FEBRUARY 14</div>
+                        <div class="duration">3:09</div>
+                    </div>
+                    <div class="name">SHEREBOY</div>
+                    <div class="meta">Afrobeat.2024</div>
+                    <audio controls>
+                        <source src="Shereboi - February 14 mix.wav" type="audio/wav" />
+                    </audio>
+                </div>
+            </div>
+            <!--No 3-->
+            <div class="music-libary music-card">
+                <img src="Farade by Shere Boy 1b.jpg" alt="music-cover" />
+                <div class="content">
+                    <div class="top-row">
+                        <div class="title">FARADE</div>
+                        <div class="duration">2:26</div>
+                    </div>
+                    <div class="name">SHEREBOY</div>
+                    <div class="meta">Afrobeat.2024</div>
+                    <audio controls>
+                        <source src="FARADE MST2.wav" type="audio/wav" />
+                    </audio>
+                </div>
+            </div>
+            <!--No 4-->
+            <div class="music-libary music-card">
+                <img src="Want Me 1.jpg" alt="music-cover" />
+                <div class="content">
+                    <div class="top-row">
+                        <div class="title">WANT ME</div>
+                        <div class="duration">4:06</div>
+                    </div>
+                    <div class="name">SHEREBOY ft BLACK DIAMOND</div>
+                    <div class="meta">Afrobeat.2025</div>
+                    <audio controls>
+                        <source src="want me mst+.wav" type="audio/wav" />
+                    </audio>
+                </div>
+            </div>
+        </div>
+        <div class="comment-section card">
+            <h2>COMMENT SECTION</h2>
+            <p>let us know what you think about the songs you just listened to.</p>
+            <div class="comment-box">
+                <textarea id="comment" placeholder="Comment your thought"></textarea>
+                <button onclick="sentMessage()">Post comment</button>
+            </div>
+            <div class="comment-box" id="displayComment"></div>
+            <h3>Fans Feedback <i class="fa-solid fa-message"></i></h3>
+            <!--people that has commented-->
+            <div class="music-comment-con">
+                <!--comment 1-->
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="user-info">
+                            <div class="music-avatar">JD</div>
+                            <div class="user-details">
+                                <h5>John Doe</h5>
+                                <span>2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activities">
+                            <span> <i style="color: rgb(209, 23, 23);" class="fa-solid fa-heart"></i>24</span>
+                            <span> <i class="fa-solid fa-reply"></i>Reply</span>
+                            <span> <i class="fa-solid fa-ellipsis-vertical"></i></span>
+                        </div>
+                    </div>
+                    <div class="comment-body"> This Album is absolutely incredible! the production quality is top-notch
+                        and
+                        "Necessary" gives me chills every time. The Farade have really outdone themselves with this
+                        release.
+                        can't wait to see them live! <i class="fa-solid fa-fire"></i> </div>
+                </div>
+                <!--comment 2-->
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="user-info">
+                            <div class="music-avatar"
+                                style="background-image: linear-gradient(rgba(25, 176, 35, 0.833),rgba(26, 26, 158, 0.724));">
+                                TK</div>
+                            <div class="user-details">
+                                <h5 style="color: green;">Treasure Keke</h5>
+                                <span>1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="activities">
+                            <span> <i style="color: rgb(209, 23, 23);" class="fa-solid fa-heart"></i>60</span>
+                            <span> <i class="fa-solid fa-reply"></i>Reply</span>
+                            <span> <i class="fa-solid fa-ellipsis-vertical"></i></span>
+                        </div>
+                    </div>
+                    <div class="comment-body">
+                        I have been following this brand since there first EP, and the growth is remarkable. the way
+                        <span style="color: blue; font-style: oblique;">shereboy</span> blend alternative rock with
+                        electronic
+                        element is seamless. "FARADE" is definitely my favorite track the lyric are so relateable.
+                    </div>
+                </div>
+                <!--comment 3-->
+                <div class="comment-card">
+                    <div class="comment-header">
+                        <div class="user-info">
+                            <div class="music-avatar"
+                                style="background-image: linear-gradient(rgba(133, 42, 94, 0.779),rgba(50, 50, 134, 0.71));">
+                                SL</div>
+                            <div class="user-details">
+                                <h5 style="color: rgba(133, 42, 94,);">Sarah Lee</h5>
+                                <span>3 days ago</span>
+                            </div>
+                        </div>
+                        <div class="activities">
+                            <span> <i style="color: rgb(209, 23, 23);" class="fa-solid fa-heart"></i>44</span>
+                            <span> <i class="fa-solid fa-reply"></i>Reply</span>
+                            <span> <i class="fa-solid fa-ellipsis-vertical"></i></span>
+                        </div>
+                    </div>
+                    <div class="comment-body">
+                        The vinyl pressing of this is gorgeous too! the artwork really pops and the sound quality is
+                        warm
+                        and rich. highly recommend picking up a physical copy if you're a collector.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end here-->
+    </div>
+    <footer>
+        <div class="footer-head">
+            <img style="width: 60px;" src="Shereboy Tech Ltd .jpg" alt="footer-logo" class="footer-logo">
+            <h2>SHEREBOY TECH LTD</h2>
+        </div>
+        <p> <span class="text-span">SHEREBOY TECH LTD|</span> Innovative Web Development • Technology Solutions •
+            Digital Growth</p>
+        <h3>QUICK LINK</h3>
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="service.html">Service</a>
+        <a href="music.html">Music</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="blog.html">Blog</a>
+        <a href="project.html">Project</a>
+        <a href="contact.html">Contact</a>
+        <h3>SERVICE</h3>
+        <p>Web development</p>
+        <p>UI\UX Design</p>
+        <p>Web maintenance</p>
+        <p>SEO(Search engine optimization)</p>
+        <p>Software development</p>
+        <h4>STAY UPDATED</h4>
+        <p>Subscribe To Our Newsletter For The Latest Updates And Insights.</p><br>
+        <input type="email" id="email" name="email" placeholder="Enter your Email">
+        <button type="submit" id="update">Subscribe</button>
+        <div class="social-media">
+            <a href=""><i class="fab fa-facebook"></i></a>
+            <a
+                href="https://wa.me/2348124529757?text=Hello%20SHEREBOY%20TECH%20LTD%2C%20I%20am%20interested%20in%20your%20services.">
+                <i class="fab fa-whatsapp"></i></a>
+            <a href=""><i class="fab fa-tiktok"></i></a>
+            <a href="mailto:shereboyofficial1515@gmail.com"> <i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/2347010288040"> <i class="fas fa-phone"></i></a>
+        </div>
+        <div class="footer-buttom">
+            <p>&copy; 2026 SHEREBOY TECH LTD</p>
+            <p>All right reserved.</p>
+            <p class="fot-bottom"> <span>Privacy Policy</span> <span>Terms of Service</span> <span>cookies</span> </p>
+        </div>
+    </footer>
+    <div class="glow"></div>
+    <div class="glow-2"></div>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
