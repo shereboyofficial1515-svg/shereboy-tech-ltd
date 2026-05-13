@@ -1,14 +1,20 @@
+*,*::before, *::after{
+    box-sizing:border-box ; }
+
+html{
+    scroll-behavior: smooth;
+}
 body {
     margin: 0%;
     padding: 0%;
+    overflow-x:hidden ;
     box-sizing: border-box;
     font-family: "poppins", sans-serif;
     line-height: 1.5;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-    scroll-behavior: smooth;
-    height: 100vh;
+    background-attachment: fixed;
+    min-height: 100vh;
     color: var(--text-primary);
-
 }
 
 :root {
@@ -33,10 +39,12 @@ body {
 .contact-section {
     max-width: 1100px;
     margin: 4rem auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.3rem, 4vw, 2.5rem);
     color: var(--accent);
     font-weight: bold;
     margin: 0%;
@@ -44,6 +52,7 @@ header h1 {
 
 header {
     background: var(--bg-secondary);
+    padding-right: 80px;
     position: sticky;
     border: 1px solid var(--border);
     top: 0%;
@@ -278,8 +287,8 @@ header p {
     margin: 10px auto;
     position: fixed;
     z-index: -1000;
-    right: 200PX;
-    top: 200PX;
+    right: 200px;
+    top: 200px;
     box-shadow: 0px 0px 10px rgba(10, 152, 228, 0.377);
     animation: blin 10s linear infinite;
     background-image: radial-gradient(circle, rgba(8, 168, 236, 0.15));
@@ -407,6 +416,7 @@ footer .footer-head {
 
 footer .social-media {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin: 10px 0;
 }
@@ -414,6 +424,11 @@ footer .social-media {
 .social-media i {
     background: #1a3eb38a;
     padding: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: var(--radius);
     color: var(--text-primary);
 }
@@ -448,6 +463,8 @@ footer .social-media {
 footer input[type="email"] {
     width: 100%;
     max-width: 400px;
+    display: block;
+    box-sizing: border-box;
     padding: 14px 18px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -457,6 +474,10 @@ footer input[type="email"] {
 }
 
 footer button#update {
+    width: 100%;
+    max-width: 400px;
+    display: block;
+    box-sizing: border-box;
     margin-top: 12px;
     margin-bottom: 20px;
     padding: 13px 28px;
@@ -481,11 +502,12 @@ footer input:focus {
 
 footer .fot-bottom {
     display: flex;
+    flex-wrap: wrap;
     padding-top: 15px;
     border-top: 1px solid #6d6161dc;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 35px;
+    gap: 8px;
 }
 
 /* === BELOW IS THE HOME SECTION === */
@@ -695,7 +717,8 @@ footer .fot-bottom {
 }
 
 .about-img-container img {
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     display: block;
     border-radius: var(--radius);
     text-align: center;
@@ -789,7 +812,7 @@ footer .fot-bottom {
 
 .about-us-display {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
     justify-content: center;
     align-items: center;
     grid-gap: 2.5rem;
@@ -874,6 +897,11 @@ footer .fot-bottom {
 }
 
 .service-section div i {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 40px;
     margin: 15px auto;
     color: var(--accent);
@@ -1046,6 +1074,7 @@ footer .fot-bottom {
     border: 1px solid var(--accent);
     margin: 3rem auto;
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
    /* background: rgba(42, 56, 59, 0.5);*/
     transition: var(--transition);
@@ -1586,6 +1615,7 @@ footer .fot-bottom {
 }
 
 .blog-section input {
+    box-sizing: border-box;
     padding: 10px;
     border: 1px solid;
     border-radius: 10px;
@@ -1626,8 +1656,8 @@ footer .fot-bottom {
 
 .blog-section .blog-img-text {
     position: absolute;
-    top: 50px;
-    left: 60px;
+    top: 1.2rem;
+    left: 1.2rem;
     z-index: 1000;
 }
 
@@ -1673,12 +1703,12 @@ footer .fot-bottom {
     position: relative;
     line-height: 1.6;
     box-shadow: 0px 0px 5px rgb(120, 189, 212);
-    padding: 3rem;
+    padding: 1.5rem;
     border-radius: 15px;
     margin-top: 3rem;
-        background: rgba(42, 56, 59, 0.5);
-        border: 1px solid var(--border);
-        transition: var(--transition);
+    background: rgba(42, 56, 59, 0.5);
+    border: 1px solid var(--border);
+    transition: var(--transition);
 }
 
 .blog-card:hover {
@@ -1712,7 +1742,7 @@ footer .fot-bottom {
 }
 
 .project-container h5,
-h2 {
+.project-container h2 {
     font-size: 2rem;
     margin: 0%;
     line-height: 1.2;
@@ -1732,6 +1762,7 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     gap: 2rem;
     margin: 3.3rem auto;
 }
@@ -1844,6 +1875,7 @@ h2 {
 
 .project-card .tech-stacks {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
 }
@@ -1861,12 +1893,13 @@ h2 {
 
 .project-link {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 30px;
 }
 
 .project-link a {
-    flex: 1;
+    flex: 1 1 120px;
     text-decoration: none;
     padding: 0.75rem;
     text-align: center;
@@ -2152,7 +2185,7 @@ header h1{
 
     .service-section .service-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(1fr));
+        grid-template-columns: 1fr;
     }
 
     footer input[type="email"] {
@@ -2166,7 +2199,7 @@ header h1{
     }
     .project-grid{
         display: grid;
-        grid-template-columns:repeat(auto-fit, minmax(275px, 1fr));
+        grid-template-columns:1fr;
         margin: auto 15px;
     }
     .music-libary {
@@ -2213,7 +2246,8 @@ header h1{
     }
 
     .glow,
-    .glow-2 {
+    .glow-2,
+    .com-reg {
         display: none;
     }
 }
