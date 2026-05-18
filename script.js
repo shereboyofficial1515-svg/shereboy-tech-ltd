@@ -78,9 +78,9 @@ const css = `
 }
 
 @keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
-}
+ from { transform: translateX(-1000px); }
+  to { transform: translateX(0px) }
+ }
 
 @keyframes blink {
   50% { border-color: transparent; }
@@ -165,10 +165,7 @@ const css = `
 }
 
 .hero-title {
-  overflow: hidden;
-  border-right: 3px solid #ffd700;
-  white-space: nowrap;
-  animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
+  animation: typing 3s ease-out;
 }
 
 .counter {
