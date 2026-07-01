@@ -1,457 +1,525 @@
-/**
- * Animation Script for SHEREBOY TECH LTD Website
- * 
- * Integration Instructions:
- * 1. Include this script.js file in your HTML after all content, just before </body>.
- * 2. Ensure your HTML has the following structure/classes (add if missing):
- *    - Hero section: <section id="hero"> with <h1 class="hero-title"> for typing effect.
- *    - Sections: <section class="section"> for fade-up animations.
- *    - Cards: <div class="card"> for slide-in animations (services, projects, blogs, testimonials).
- *    - Sidebar: <nav id="sidebar"> with <button id="sidebar-toggle">.
- *    - Progress bar: Add <div id="scroll-progress"></div> at the top of body.
- *    - Navigation: <nav id="nav"> with <a href="#section-id"> for active highlighting.
- *    - Counters: <div class="counter" data-target="number"> for statistics.
- *    - Buttons: <button class="glow-btn"> for glowing buttons.
- *    - Images: <img class="zoom-img"> for zoom-on-scroll.
- *    - Background: <div class="glow-bg"> for parallax glow.
- *    - Particles: <div id="particles"> for floating particles.
- *    - Testimonial carousel: <div class="testimonial-carousel"> with slides.
- *    - Music cards: <div class="music-card"> with audio elements.
- *    - Form: <form id="contact-form"> with success/error messages.
- *    - WhatsApp button: <a id="whatsapp-float">.
- * 3. For smooth page transitions, add CSS transitions to body or main container.
- * 4. Test on mobile devices and adjust Intersection Observer thresholds if needed.
- * 
- * Extra UI Enhancement Ideas:
- * - Add subtle micro-interactions on hover for all interactive elements.
- * - Implement lazy loading for images to improve performance.
- * - Use CSS custom properties for easy theme color changes.
- * - Add a loading screen with fade-out animation on page load.
- * - Integrate with a CMS for dynamic content updates.
+/*
+ * script.js — SHEREBOY TECH LTD
+ * Clean, modular ES6 implementation for UI interactions
+ * Replaces legacy script with modern, readable, maintainable code.
+ * - Loader with fade-out
+ * - Hero typing animation
+ * - Floating background particles (lightweight)
+ * - Scroll reveal animations (IntersectionObserver)
+ * - FAQ live search with "No results found"
+ * - Disable Blog & Project sections and show professional modal
+ * - Contact form validation and contact-send modal (Email / WhatsApp)
+ *
+ * Notes:
+ * - This file intentionally does not modify HTML markup. New UI elements (modals)
+ *   are created dynamically and styled with scoped CSS injected here.
+ * - Designed to be performant and run on modern evergreen browsers.
  */
 
-// Inject necessary CSS animations
-const css = `
-/* Animation Styles */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+// ---------- Scoped CSS injected for components created by JS ----------
+const injectedCss = `
+/***** Loader *****/
+#loader-wrapper { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#0b0f13; z-index:9999; transition:opacity .5s ease; }
+#loader-wrapper .loader { text-align:center; color:#fff; }
+#loader-wrapper .loading-text{ display:inline-block; font-weight:700; font-size:1.4rem; letter-spacing:2px; }
+#loader-wrapper .spinner{ width:64px; height:64px; margin:14px auto 0; border-radius:50%; border:6px solid rgba(255,255,255,0.12); border-top-color:#ffd700; animation:spin 1s linear infinite }
+@keyframes spin{ to{ transform:rotate(360deg); } }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+/* Modal (generic) */
+.js-modal-backdrop{ position:fixed; inset:0; background:rgba(6,10,15,0.6); display:flex; align-items:center; justify-content:center; z-index:10010; }
+.js-modal{ width:clamp(300px, 80%, 760px); background:#fff; border-radius:10px; padding:20px; box-shadow:0 10px 30px rgba(2,6,23,0.4); color:#141414; font-family:inherit; }
+.js-modal h3{ margin:0 0 8px; font-size:1.15rem; }
+.js-modal p{ margin:0 0 14px; color:#4b5563; }
+.js-modal .btn-row{ display:flex; gap:10px; justify-content:flex-end; margin-top:16px; }
+.js-modal .btn{ padding:10px 14px; border-radius:8px; border:0; cursor:pointer; font-weight:600 }
+.js-modal .btn.secondary{ background:#eef2f7; color:#0b1320 }
+.js-modal .btn.primary{ background:linear-gradient(90deg,#ffd700,#007bff); color:#051022 }
+.js-modal .btn.block{ flex:1 }
 
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+/* FAQ no-results */
+.faq-no-results{ padding:14px; color:#6b7280; font-style:italic; }
 
-@keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(0, 123, 255, 0.4); }
-}
+/* Form validation */
+.js-field-error{ border-color:#ef4444 !important; box-shadow:0 0 0 3px rgba(239,68,68,0.07); }
+.js-field-help{ color:#dc2626; font-size:0.875rem; margin-top:6px }
 
-@keyframes tiltHover {
-  0% { transform: perspective(1000px) rotateX(0) rotateY(0); }
-  25% { transform: perspective(1000px) rotateX(-5deg) rotateY(5deg); }
-  50% { transform: perspective(1000px) rotateX(5deg) rotateY(-5deg); }
-  75% { transform: perspective(1000px) rotateX(-2deg) rotateY(2deg); }
-  100% { transform: perspective(1000px) rotateX(0) rotateY(0); }
-}
-
-@keyframes zoomIn {
-  from { transform: scale(1); }
-  to { transform: scale(1.1); }
-}
-
-@keyframes parallax {
-  from { transform: translateY(0); }
-  to { transform: translateY(-20px); }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-@keyframes typing {
- from { transform: translateX(-1000px); }
-  to { transform: translateX(0px) }
- }
-
-@keyframes blink {
-  50% { border-color: transparent; }
-}
-
-.section {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.section.reveal {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.card {
-  opacity: 0;
-  transform: translateX(-50px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.card.reveal {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.card:nth-child(even) {
-  transform: translateX(50px);
-}
-
-.card:nth-child(even).reveal {
-  transform: translateX(0);
-}
-
-.glow-btn {
-  transition: box-shadow 0.3s ease;
-}
-
-.glow-btn:hover {
-  animation: glowPulse 1s infinite;
-}
-
-.project-card:hover {
-  animation: tiltHover 0.6s ease;
-}
-
-.zoom-img {
-  transition: transform 0.3s ease;
-}
-
-.zoom-img.reveal {
-  animation: zoomIn 0.6s ease;
-}
-
-.glow-bg {
-  animation: parallax 2s ease-in-out infinite alternate;
-}
-
-.music-card.playing {
-  animation: pulse 1s infinite;
-}
-
-#scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 4px;
-  background: linear-gradient(90deg, #ffd700, #007bff);
-  z-index: 1000;
-  transition: width 0.1s ease;
-}
-
-#sidebar {
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-}
-
-#sidebar.open {
-  transform: translateX(0);
-}
-
-.hero-title {
-  animation: typing 3s ease-out;
-}
-
-.counter {
-  font-size: 2rem;
-  transition: all 0.5s ease;
-}
-
-.testimonial-carousel {
-  overflow: hidden;
-}
-
-.testimonial-slide {
-  display: none;
-}
-
-.testimonial-slide.active {
-  display: block;
-  animation: fadeUp 0.6s ease;
-}
-
-#particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.particle {
-  position: absolute;
-  background: rgba(255, 215, 0, 0.1);
-  border-radius: 50%;
-  animation: float 10s infinite linear;
-}
-
-@keyframes float {
-  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-}
-
-@media (max-width: 768px) {
-  .section, .card {
-    transform: translateY(20px);
-  }
-  .card {
-    transform: translateX(0);
-  }
-}
+/* Small helper */
+[data-disabled="true"]{ pointer-events:none; opacity:0.65 }
 `;
+(function injectStyles(){
+  const s = document.createElement('style');
+  s.id = 'js-injected-styles';
+  s.textContent = injectedCss;
+  document.head.appendChild(s);
+})();
 
-const style = document.createElement('style');
-style.textContent = css;
-document.head.appendChild(style);
+// ---------- Utility helpers ----------
+const $ = selector => document.querySelector(selector);
+const $$ = selector => Array.from(document.querySelectorAll(selector));
+const on = (el, evt, fn, opts) => el && el.addEventListener(evt, fn, opts);
+const once = (el, evt, fn) => on(el, evt, fn, { once: true });
+const noop = () => {};
 
-// Utility functions
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
+function debounce(fn, wait = 100){ let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), wait); } }
+
+function createEl(tag, attrs = {}, children = []){
+  const el = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{
+    if(k === 'class') el.className = v;
+    else if(k === 'text') el.textContent = v;
+    else if(k === 'html') el.innerHTML = v;
+    else if(k === 'dataset') Object.assign(el.dataset, v);
+    else el.setAttribute(k, v);
+  });
+  children.forEach(c => el.appendChild(c));
+  return el;
 }
 
-function throttle(func, limit) {
-  let inThrottle;
-  return function () {
-    const args = arguments;
-    const context = this;
-    if (!inThrottle) {
-      func.apply(context, args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  }
-}
+// ---------- Loader Module ----------
+const Loader = (function(){
+  const wrapperId = 'loader-wrapper';
+  let wrapper = null;
 
-// Intersection Observer for reveal animations
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('reveal');
-    }
-  });
-}, observerOptions);
-
-// Initialize animations on DOM load
-document.addEventListener('DOMContentLoaded', () => {
-  // Reveal sections
-  document.querySelectorAll('.section').forEach(section => observer.observe(section));
-
-  // Reveal cards with stagger
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((card, index) => {
-    observer.observe(card);
-    card.style.transitionDelay = `${index * 0.1}s`;
-  });
-
-  // Scroll progress indicator
-  const progressBar = document.getElementById('scroll-progress');
-  if (progressBar) {
-    window.addEventListener('scroll', throttle(() => {
-      const scrollTop = window.pageYOffset;
-      const docHeight = document.body.offsetHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      progressBar.style.width = scrollPercent + '%';
-    }, 10));
-  }
-
-  // Active navigation highlighting
-  const navLinks = document.querySelectorAll('#nav a');
-  const sections = document.querySelectorAll('section[id]');
-  if (navLinks.length && sections.length) {
-    window.addEventListener('scroll', debounce(() => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (pageYOffset >= sectionTop - 60) {
-          current = section.getAttribute('id');
-        }
-      });
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
-          link.classList.add('active');
-        }
-      });
-    }, 100));
-  }
-
-  // Counter animation
-  const counters = document.querySelectorAll('.counter');
-  counters.forEach(counter => {
-    const target = +counter.getAttribute('data-target');
-    const increment = target / 200;
-    let count = 0;
-    const updateCount = () => {
-      if (count < target) {
-        count += increment;
-        counter.innerText = Math.ceil(count);
-        requestAnimationFrame(updateCount);
-      } else {
-        counter.innerText = target;
-      }
-    };
-    observer.observe(counter);
-    counter.addEventListener('animationstart', updateCount, { once: true });
-  });
-
-  // Sidebar toggle
-  const sidebar = document.getElementById('sidebar');
-  const toggle = document.getElementById('sidebar-toggle');
-  if (sidebar && toggle) {
-    toggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-    });
-  }
-
-  // Zoom on scroll for images
-  document.querySelectorAll('.zoom-img').forEach(img => observer.observe(img));
-
-  // Parallax glow background
-  document.querySelectorAll('.glow-bg').forEach(bg => observer.observe(bg));
-
-  // Testimonial carousel
-  const carousel = document.querySelector('.testimonial-carousel');
-  if (carousel) {
-    const slides = carousel.querySelectorAll('.testimonial-slide');
-    let currentSlide = 0;
-    const nextSlide = () => {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    };
-    setInterval(nextSlide, 5000);
-    slides[0].classList.add('active');
-  }
-
-  // Music card pulse
-  document.querySelectorAll('.music-card audio').forEach(audio => {
-    audio.addEventListener('play', () => {
-      audio.closest('.music-card').classList.add('playing');
-    });
-    audio.addEventListener('pause', () => {
-      audio.closest('.music-card').classList.remove('playing');
-    });
-  });
-
-  // Form animations
-  const form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // Simulate form submission
-      const successMsg = document.createElement('div');
-      successMsg.textContent = 'Message sent successfully!';
-      successMsg.style.cssText = 'color: #344247; animation: fadeUp 0.5s ease;';
-      form.appendChild(successMsg);
-      setTimeout(() => successMsg.remove(), 3000);
-    });
-  }
-
-  // Floating particles
-  const particlesContainer = document.getElementById('particles');
-  if (particlesContainer) {
-    for (let i = 0; i < 50; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.width = particle.style.height = Math.random() * 5 + 2 + 'px';
-      particle.style.animationDelay = Math.random() * 10 + 's';
-      particlesContainer.appendChild(particle);
-    }
-  }
-
-  // Floating WhatsApp button
-  // const whatsappBtn = document.getElementById('whatsapp-float');
-  // if (whatsappBtn) {
-  //  window.addEventListener('scroll', throttle(() => {
-  //    whatsappBtn.style.transform = `translateY(${window.pageYOffset * 0.5}px)`;
-  //  }, 10));}
-
-  // Page transitions (basic fade)
-  window.addEventListener('beforeunload', () => {
-    document.body.style.opacity = '0';
-  });
-});
-const faqSearch = document.getElementById("faq");
-
-// SEARCH FUNCTIONALITY FOR FAQ
-const searchInput = document.getElementById("faq");
-const faqItems = document.querySelectorAll(".details-content");
-
-searchInput.addEventListener("keyup", function () {
-
-  let searchValue = searchInput.value.toLowerCase();
-
-  faqItems.forEach(function (item) {
-
-    let text = item.innerText.toLowerCase();
-
-    if (text.includes(searchValue)) {
-      item.style.display = "block";
+  function init(){
+    wrapper = document.getElementById(wrapperId);
+    if(!wrapper){
+      // Create minimal loader if not present in HTML
+      wrapper = createEl('div', { id: wrapperId });
+      const loader = createEl('div', { class: 'loader' });
+      loader.appendChild(createEl('div', { class: 'loading-text', text: 'SHEREBOY TECH LTD' }));
+      loader.appendChild(createEl('div', { class: 'spinner' }));
+      wrapper.appendChild(loader);
+      document.body.appendChild(wrapper);
     } else {
-      item.style.display = "none";
+      // enhance existing loader markup if missing spinner
+      if(!wrapper.querySelector('.spinner')){
+        const span = createEl('div', { class: 'spinner' });
+        wrapper.querySelector('.loader')?.appendChild(span);
+      }
     }
-
-  });
-
-});
-// BLOG SEARCH FUNCTIONALITY
-
-
-// Live search on every keystroke
-searchInput?.addEventListener('input', e => filterCards(e.target.value));
-
-// Also support Enter key
-searchInput?.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    searchInput.value = '';
-    filterCards('');
+    // ensure visible initially
+    wrapper.style.opacity = '1';
   }
-});
-window.addEventListener("load", () => {
 
-  const loader = document.getElementById("loader-wrapper");
+  function hide(){
+    if(!wrapper) return;
+    wrapper.style.opacity = '0';
+    // after transition remove from flow
+    setTimeout(()=>{
+      wrapper.style.display = 'none';
+    }, 500);
+  }
 
-  loader.style.opacity = "0";
+  // wait for full page load then hide
+  function attach(){
+    if(document.readyState === 'complete'){
+      // small delay to make UX smooth
+      setTimeout(hide, 300);
+    } else {
+      once(window, 'load', ()=> setTimeout(hide, 300));
+    }
+  }
 
-  setTimeout(() => {
-    loader.style.display = "none";
-  }, 700);
+  return { init, attach };
+})();
 
-});
+// ---------- Typing animation (Hero) ----------
+const HeroTyping = (function(){
+  const selector = '.hero-title';
+  const typingSpeed = 40; // ms per char
+  const pauseAfter = 1500; // ms
+  let el = null;
+  let originalText = '';
+  let timer = null;
 
-// Performance optimization: Use requestAnimationFrame for heavy animations
-// All animations are optimized with CSS transitions and Intersection Observer for lazy loading
+  function init(){
+    el = document.querySelector(selector);
+    if(!el) return;
+    originalText = el.textContent.trim();
+    // If markup contains nested strong.company-name keep original and use textContent
+    el.textContent = '';
+    start();
+  }
+
+  async function start(){
+    // Type in, pause, then optionally loop by deleting and retyping gracefully
+    await typeText(originalText);
+    await wait(pauseAfter);
+    // graceful loop: delete then retype
+    await deleteText();
+    await wait(400);
+    start();
+  }
+
+  function typeText(text){
+    return new Promise(resolve => {
+      let i = 0;
+      timer = setInterval(()=>{
+        el.textContent = text.slice(0, ++i);
+        if(i === text.length){
+          clearInterval(timer);
+          resolve();
+        }
+      }, typingSpeed);
+    });
+  }
+
+  function deleteText(){
+    return new Promise(resolve => {
+      let i = el.textContent.length;
+      timer = setInterval(()=>{
+        el.textContent = el.textContent.slice(0, --i);
+        if(i <= 0){ clearInterval(timer); resolve(); }
+      }, Math.max(typingSpeed/2, 20));
+    });
+  }
+
+  function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  return { init };
+})();
+
+// ---------- Floating particles (background) ----------
+const FloatingBg = (function(){
+  const containerId = 'particles';
+  const maxParticles = 30; // tuned for performance
+  const particleClass = 'js-float-particle';
+  let container = null;
+  let particles = [];
+
+  function init(){
+    container = document.getElementById(containerId);
+    if(!container) return;
+    container.style.position = 'fixed';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '-1';
+    container.style.inset = '0';
+    // create particles
+    const count = Math.min(maxParticles, Math.max(8, Math.floor(window.innerWidth/100)));
+    for(let i=0;i<count;i++){
+      const p = document.createElement('div');
+      p.className = particleClass;
+      const size = (Math.random()*18)+6; // 6-24px
+      p.style.width = p.style.height = size + 'px';
+      p.style.borderRadius = '50%';
+      p.style.opacity = String(0.06 + Math.random()*0.12);
+      p.style.background = `radial-gradient(circle at 30% 30%, rgba(255,215,0,0.12), rgba(0,123,255,0.04))`;
+      p.style.position = 'absolute';
+      resetParticle(p, true);
+      container.appendChild(p);
+      particles.push({el:p, vy: (0.2 + Math.random()*0.6), vx: (Math.random()*0.6 - 0.3)});
+    }
+    requestAnimationFrame(animate);
+    on(window, 'resize', debounce(handleResize, 250));
+  }
+
+  function resetParticle(p, initial=false){
+    const x = Math.random() * window.innerWidth;
+    const y = window.innerHeight + (initial? Math.random()*200 : 40 + Math.random()*200);
+    p.style.transform = `translate(${x}px, ${y}px)`;
+    p.dataset.x = x; p.dataset.y = y;
+  }
+
+  function animate(){
+    for(const obj of particles){
+      const el = obj.el;
+      let x = parseFloat(el.dataset.x);
+      let y = parseFloat(el.dataset.y);
+      y -= obj.vy; // move upward
+      x += obj.vx;
+      // slight oscillation
+      x += Math.sin(Date.now()/10000 + x) * 0.15;
+      el.dataset.x = x; el.dataset.y = y;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+      // recycle
+      if(y < -150){ resetParticle(el); }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function handleResize(){
+    // On resize, reposition particles to keep them within bounds
+    particles.forEach(p => {
+      const el = p.el;
+      el.dataset.x = Math.random() * window.innerWidth;
+      el.dataset.y = window.innerHeight + Math.random()*200;
+    });
+  }
+
+  return { init };
+})();
+
+// ---------- Scroll reveal animations ----------
+const ScrollReveal = (function(){
+  const revealClass = 'reveal';
+  const selector = '.section, .card, .hero-title, .zoom-img, .glow-bg, .details-content';
+  let observer = null;
+
+  function init(){
+    const elements = $$(selector);
+    if(!elements.length) return;
+    const ioOptions = { threshold: 0.12, rootMargin: '0px 0px -60px 0px' };
+    observer = new IntersectionObserver(handleEntries, ioOptions);
+    elements.forEach((el, idx) => {
+      // stagger for cards
+      if(el.classList.contains('card')) el.style.transitionDelay = `${Math.min(0.4, idx*0.06)}s`;
+      observer.observe(el);
+    });
+  }
+
+  function handleEntries(entries){
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add(revealClass);
+        // reveal once
+        observer.unobserve(entry.target);
+      }
+    });
+  }
+
+  return { init };
+})();
+
+// ---------- FAQ Live Search ----------
+const FAQSearch = (function(){
+  const input = document.getElementById('faq');
+  const itemsSelector = '.details-content';
+  let items = [];
+  let noResultsEl = null;
+
+  function init(){
+    if(!input) return;
+    items = $$(itemsSelector);
+    // create no-results element
+    noResultsEl = createEl('div', { class: 'faq-no-results', text: 'No results found.' });
+    input.addEventListener('input', debounce(handleSearch, 120));
+    // support clearing via Escape
+    input.addEventListener('keydown', e => { if(e.key === 'Escape'){ input.value = ''; handleSearch(); } });
+  }
+
+  function handleSearch(){
+    const q = (input.value || '').trim().toLowerCase();
+    let visible = 0;
+    items.forEach(item => {
+      const text = item.innerText.toLowerCase();
+      const match = !q || text.includes(q);
+      item.style.display = match ? '' : 'none';
+      if(match) visible++;
+    });
+    // Manage no-results message
+    const parent = items[0]?.parentElement;
+    if(parent){
+      if(visible === 0){
+        if(!parent.contains(noResultsEl)) parent.appendChild(noResultsEl);
+      } else {
+        if(parent.contains(noResultsEl)) parent.removeChild(noResultsEl);
+      }
+    }
+  }
+
+  return { init };
+})();
+
+// ---------- Sections Under Development (Blog / Project) ----------
+const UnderDevelopment = (function(){
+  const blockedPaths = ['blog.html', 'project.html'];
+  let modal = null;
+
+  function init(){
+    // Intercept clicks on links that point to blocked paths
+    document.addEventListener('click', e => {
+      const a = e.target.closest && e.target.closest('a');
+      if(!a || !a.getAttribute) return;
+      const href = a.getAttribute('href') || '';
+      // Check if href ends with the blocked path (or contains it)
+      const isBlocked = blockedPaths.some(p => href.includes(p));
+      if(isBlocked){
+        e.preventDefault();
+        showModal();
+      }
+    });
+
+    // Disable programmatic navigation via forms or other elements by marking elements
+    const allLinks = $$('a');
+    allLinks.forEach(a => {
+      const href = a.getAttribute('href') || '';
+      if(blockedPaths.some(p=>href.includes(p))){
+        a.dataset.disabled = 'true';
+      }
+    });
+  }
+
+  function showModal(){
+    if(modal) return; // already shown
+    modal = createModal({ title: 'Section under development',
+      text: "This section is currently under development. We're still working on it. Please check back soon.",
+      primaryText: 'OK'
+    });
+    document.body.appendChild(modal.backdrop);
+  }
+
+  return { init, showModal };
+})();
+
+// ---------- Contact Form Validation + Send Modal ----------
+const ContactForm = (function(){
+  const formSelector = '#contact-form';
+  const minMessageLength = 12;
+  let form = null;
+
+  function init(){
+    form = document.querySelector(formSelector);
+    if(!form) return;
+    form.addEventListener('submit', handleSubmit);
+  }
+
+  function handleSubmit(e){
+    e.preventDefault();
+    clearErrors();
+    const fields = collectFields();
+    const errors = validate(fields);
+    if(Object.keys(errors).length){
+      showErrors(errors);
+      return;
+    }
+    // valid — show send modal
+    showSendModal(fields);
+  }
+
+  function collectFields(){
+    const data = {};
+    // best-effort mapping to common field names
+    const nameEl = form.querySelector('input[name="full-name"], input[name="name"], input#name, input#full_name, input.full-name') || form.querySelector('input[type="text"]');
+    const emailEl = form.querySelector('input[type="email"], input[name="email"]');
+    const phoneEl = form.querySelector('input[name="phone"], input[name="tel"], input#phone');
+    const subjectEl = form.querySelector('input[name="subject"], input#subject');
+    const messageEl = form.querySelector('textarea[name="message"], textarea#message');
+
+    data.name = nameEl?.value?.trim() || '';
+    data.email = emailEl?.value?.trim() || '';
+    data.phone = phoneEl?.value?.trim() || '';
+    data.subject = subjectEl?.value?.trim() || '';
+    data.message = messageEl?.value?.trim() || '';
+
+    // store elements for error display
+    data._els = { nameEl, emailEl, phoneEl, subjectEl, messageEl };
+    return data;
+  }
+
+  function validate({ name, email, phone, subject, message }){
+    const errors = {};
+    if(!name) errors.name = 'Full name is required.';
+    if(!email) errors.email = 'Email address is required.';
+    else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'Please enter a valid email address.';
+    if(!phone) errors.phone = 'Phone number is required.';
+    else if(!/^[0-9+()\s-]{7,20}$/.test(phone)) errors.phone = 'Please enter a valid phone number (7-20 digits).' ;
+    if(!message || message.length < minMessageLength) errors.message = `Message must be at least ${minMessageLength} characters.`;
+    return errors;
+  }
+
+  function showErrors(errors){
+    Object.entries(errors).forEach(([k,msg]) => {
+      const el = form.querySelector({ name: 'name' } ? 'input[name="full-name"], input[name="name"], input#name' : '');
+      // map to specific element selectors
+      let fieldEl = null;
+      if(k === 'name') fieldEl = form.querySelector('input[name="full-name"], input[name="name"], input#name');
+      if(k === 'email') fieldEl = form.querySelector('input[type="email"], input[name="email"]');
+      if(k === 'phone') fieldEl = form.querySelector('input[name="phone"], input[name="tel"], input#phone');
+      if(k === 'subject') fieldEl = form.querySelector('input[name="subject"], input#subject');
+      if(k === 'message') fieldEl = form.querySelector('textarea[name="message"], textarea#message');
+
+      if(fieldEl){
+        fieldEl.classList.add('js-field-error');
+        // add help text
+        const help = createEl('div', { class: 'js-field-help', text: msg });
+        fieldEl.insertAdjacentElement('afterend', help);
+      }
+    });
+    // focus first invalid field
+    const first = form.querySelector('.js-field-error');
+    if(first) first.focus();
+  }
+
+  function clearErrors(){
+    form.querySelectorAll('.js-field-help').forEach(el=>el.remove());
+    form.querySelectorAll('.js-field-error').forEach(el=>el.classList.remove('js-field-error'));
+  }
+
+  function showSendModal(fields){
+    const body = [];
+    if(fields.subject) body.push(`Subject: ${fields.subject}`);
+    if(fields.message) body.push(`Message: ${fields.message}`);
+    body.push(`From: ${fields.name} (${fields.email}${fields.phone? ', ' + fields.phone : ''})`);
+    const text = 'How would you like to send your message?';
+
+    const modal = createModal({
+      title: 'Send message',
+      text,
+      primaryText: 'Send via Email',
+      secondaryText: 'Send via WhatsApp',
+      onPrimary: () => {
+        // open default email client with mailto
+        const subject = fields.subject || 'Message from SHEREBOY TECH LTD website';
+        const bodyText = `${fields.message}\n\n--\n${fields.name}\n${fields.email}${fields.phone? ('\n' + fields.phone): ''}`;
+        const mailto = `mailto:${encodeURIComponent(fields.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+        // Some clients don't like percent-encoded recipient in mailto when not intended; using blank recipient is nicer
+        window.location.href = mailto;
+      },
+      onSecondary: () => {
+        // open WhatsApp with message prefilled
+        const waNumber = ''; // optional: put business number if desired, otherwise opens selector
+        const message = `${fields.subject ? fields.subject + ' - ' : ''}${fields.message}\n\nFrom: ${fields.name} (${fields.email}${fields.phone? ', ' + fields.phone : ''})`;
+        const href = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+        window.open(href, '_blank');
+      }
+    });
+    document.body.appendChild(modal.backdrop);
+  }
+
+  return { init };
+})();
+
+// ---------- Small reusable modal builder ----------
+function createModal({ title = '', text = '', primaryText = 'OK', secondaryText = null, onPrimary = null, onSecondary = null }){
+  const backdrop = createEl('div', { class: 'js-modal-backdrop' });
+  const modal = createEl('div', { class: 'js-modal' });
+  const h = createEl('h3', { text: title });
+  const p = createEl('p', { text });
+  modal.appendChild(h); modal.appendChild(p);
+  const btnRow = createEl('div', { class: 'btn-row' });
+
+  if(secondaryText){
+    const sec = createEl('button', { class: 'btn secondary', text: secondaryText });
+    sec.addEventListener('click', () => { if(onSecondary) onSecondary(); document.body.removeChild(backdrop); });
+    btnRow.appendChild(sec);
+  }
+
+  const prim = createEl('button', { class: `btn primary ${secondaryText ? '' : 'block'}`, text: primaryText });
+  prim.addEventListener('click', () => { if(onPrimary) onPrimary(); document.body.removeChild(backdrop); });
+  btnRow.appendChild(prim);
+
+  const close = createEl('button', { class: 'btn secondary', text: 'Close' });
+  close.addEventListener('click', ()=> { document.body.removeChild(backdrop); });
+  btnRow.appendChild(close);
+
+  modal.appendChild(btnRow);
+  backdrop.appendChild(modal);
+  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) document.body.removeChild(backdrop); });
+  return { backdrop, modal };
+}
+
+// ---------- Page init ----------
+function initAll(){
+  Loader.init(); Loader.attach();
+  HeroTyping.init();
+  FloatingBg.init();
+  ScrollReveal.init();
+  FAQSearch.init();
+  UnderDevelopment.init();
+  ContactForm.init();
+}
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);
+else initAll();
+
+// End of script.js
